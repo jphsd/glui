@@ -5,7 +5,7 @@ import (
 	"image"
 	"os"
 
-	"jphsd.org/glui"
+	"github.org/jphsd/glui"
 
 	_ "golang.org/x/image/bmp"
 	_ "golang.org/x/image/tiff"

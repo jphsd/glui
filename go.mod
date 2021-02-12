@@ -1,4 +1,4 @@
-module jphsd.org/glui
+module github.com/jphsd/glui
 
 go 1.15
 

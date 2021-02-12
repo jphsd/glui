@@ -8,7 +8,7 @@ import (
 
 	"github.com/go-gl/glfw/v3.3/glfw"
 
-	"jphsd.org/glui"
+	"github.com/jphsd/glui"
 
 	_ "golang.org/x/image/bmp"
 	_ "golang.org/x/image/tiff"
