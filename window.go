@@ -41,6 +41,11 @@ func NewGLWin(w, h int, title string, img image.Image, decorated bool) *GLWin {
 		glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
 	}
 
+	if decorated {
+		glfw.WindowHint(glfw.Decorated, glfw.True)
+	} else {
+		glfw.WindowHint(glfw.Decorated, glfw.False)
+	}
 	window, err := glfw.CreateWindow(w, h, title, nil, nil)
 	if err != nil {
 		panic(err)
