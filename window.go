@@ -1,3 +1,5 @@
+// Package glui provides a simple way to display an image or images on a screen, each in its own window.
+// The package makes use of the GLFW library and OpenGL v4.1
 package glui
 
 import (
@@ -12,6 +14,7 @@ import (
 	"github.com/go-gl/glfw/v3.3/glfw"
 )
 
+// GLWin ties an image to a window
 type GLWin struct {
 	Img   *image.RGBA
 	Win   *glfw.Window
@@ -19,6 +22,7 @@ type GLWin struct {
 	lock  sync.Mutex
 }
 
+// WinMap provides a map of all windows to their corresponding GLWin
 var WinMap map[*glfw.Window]*GLWin = make(map[*glfw.Window]*GLWin)
 var initialized bool = false
 
@@ -27,10 +31,12 @@ func init() {
 	runtime.LockOSThread()
 }
 
-// Create a new window
+// NewGLWin is used to create a new window of width w and height h. If the window is decorated
+// then the title will appear in the window frame. Note - the window and image sizes are independent
+// of each other. The image is scaled (not cropped) to fit the window.
 func NewGLWin(w, h int, title string, img image.Image, decorated bool) *GLWin {
 	if !initialized {
-		// Inititalize glfw package
+		// Inititalize GLFW package
 		if err := glfw.Init(); err != nil {
 			panic(err)
 		}
@@ -83,6 +89,7 @@ func convertImage(img image.Image) *image.RGBA {
 	return rgba
 }
 
+// SetImage is used to change the current image in a window. It's thread safe.
 func (w *GLWin) SetImage(img image.Image) {
 	w.lock.Lock()
 	defer w.lock.Unlock()
@@ -90,7 +97,9 @@ func (w *GLWin) SetImage(img image.Image) {
 	w.dirty = true
 }
 
-// The update loop - runs until there are no windows left
+// Loop is how window events get processed and the images rendered to their windows. It will run
+// until there are no windows left to process. The update function provides a way to insert code
+// into this loop - it should be non-blocking otherwise window updates will stall.
 func Loop(update func()) {
 	defer glfw.Terminate()
 

@@ -17,6 +17,8 @@ import (
 	_ "image/png"
 )
 
+// A more sophisticated version of image.go that takes a collection of images and cycles
+// through them.
 func main() {
 	// Read in files indicated on command line
 	flag.Parse()
@@ -36,8 +38,8 @@ func main() {
 		images[i] = img
 	}
 
+	// Create a new window to display the images and set a callback
 	win := glui.NewGLWin(800, 800, "Images", images[0], true)
-	// Close the window if ESC pressed
 	win.Win.SetKeyCallback(keyCallback)
 
 	go update(win, images)
@@ -46,7 +48,7 @@ func main() {
 }
 
 func keyCallback(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
-	// Close window on ESC
+	// Close window on ESC key pressed
 	if key == glfw.KeyEscape {
 		w.SetShouldClose(true)
 	}
@@ -55,7 +57,7 @@ func keyCallback(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action,
 func update(w *glui.GLWin, images []image.Image) {
 	n := len(images)
 	c := 0
-	d, _ := time.ParseDuration("10s")
+	d, _ := time.ParseDuration("5s")
 	for true {
 		time.Sleep(d)
 		c++
