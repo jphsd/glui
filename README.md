@@ -1,8 +1,8 @@
 # Simple Image Display For Go
 
-This package wraps the Go port of the C implementaion of GLFW in some boilerplate to make displaying an image on the screen almost trivial.
+This package wraps the [Go port](https://pkg.go.dev/github.com/go-gl/glfw/v3.3/glfw) of the [C implementaion of GLFW](https://www.glfw.org/documentation.html) in some boilerplate to make displaying an image on the screen almost trivial.
 
-The version of GL used is 4.1 and the boilerplate includes the necessary shaders to perform the rendering.
+The version of [GL used is 4.1](https://pkg.go.dev/github.com/go-gl/gl/v4.1-core/gl) and the boilerplate includes the necessary shaders to perform the rendering.
 
 See glui/cmd/image.go for a simple example of reading an image and displaying it in a window.
 

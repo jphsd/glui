@@ -90,7 +90,7 @@ func (w *GLWin) SetImage(img image.Image) {
 	w.dirty = true
 }
 
-// The update loop - runs unti there are no windows left
+// The update loop - runs until there are no windows left
 func Loop(update func()) {
 	defer glfw.Terminate()
 
