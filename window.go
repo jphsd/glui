@@ -23,8 +23,8 @@ type GLWin struct {
 }
 
 // WinMap provides a map of all windows to their corresponding GLWin
-var WinMap map[*glfw.Window]*GLWin = make(map[*glfw.Window]*GLWin)
-var initialized bool = false
+var WinMap = make(map[*glfw.Window]*GLWin)
+var initialized = false
 
 func init() {
 	// GLFW event handling *must* run on the main OS thread
@@ -36,7 +36,7 @@ func init() {
 // of each other. The image is scaled (not cropped) to fit the window.
 func NewGLWin(w, h int, title string, img image.Image, decorated bool) *GLWin {
 	if !initialized {
-		// Inititalize GLFW package
+		// Initialize GLFW package
 		if err := glfw.Init(); err != nil {
 			panic(err)
 		}

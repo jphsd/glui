@@ -34,7 +34,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		f.Close()
+		_ = f.Close()
 		images[i] = img
 	}
 
@@ -47,7 +47,7 @@ func main() {
 	glui.Loop(nil)
 }
 
-func keyCallback(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
+func keyCallback(w *glfw.Window, key glfw.Key, _ int, _ glfw.Action, _ glfw.ModifierKey) {
 	// Close window on ESC key pressed
 	if key == glfw.KeyEscape {
 		w.SetShouldClose(true)

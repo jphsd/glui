@@ -27,7 +27,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	f.Close()
+	_ = f.Close()
 	size := img.Bounds().Size()
 
 	// Create a new window with the image

@@ -409,7 +409,7 @@ type Slot struct {
 	closeable bool
 }
 
-var slots map[*glfw.Window]*Slot = make(map[*glfw.Window]*Slot)
+var slots = make(map[*glfw.Window]*Slot)
 
 func window_pos_callback(window *glfw.Window, x, y int) {
 	slot := slots[window]
@@ -507,7 +507,7 @@ func mouse_button_callback(window *glfw.Window, button glfw.MouseButton, action 
 	counter++
 }
 
-var track bool = true
+var track = true
 
 func cursor_position_callback(window *glfw.Window, x, y float64) {
 	if !track {
