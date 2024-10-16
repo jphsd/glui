@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"runtime"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
@@ -42,6 +43,11 @@ import (
 //
 //========================================================================
 */
+
+func init() {
+	// GLFW event handling *must* run on the main OS thread
+	runtime.LockOSThread()
+}
 
 func get_key_name(key glfw.Key) string {
 	switch key {
