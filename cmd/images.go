@@ -26,24 +26,17 @@ func main() {
 	images := make([]image.Image, len(args))
 
 	for i, str := range args {
-		f, err := os.Open(str)
-		if err != nil {
-			panic(err)
-		}
-		img, _, err := image.Decode(f)
-		if err != nil {
-			panic(err)
-		}
-		_ = f.Close()
-		images[i] = img
+		images[i] = readImage(str)
 	}
 
 	// Create a new window to display the images and set a callback
 	win := glui.NewGLWin(800, 800, "Images", images[0], true)
 	win.Win.SetKeyCallback(keyCallback)
 
+	// Launch the image updater
 	go update(win, images)
 
+	// Allow the system to render it
 	glui.Loop(nil)
 }
 
@@ -66,4 +59,19 @@ func update(w *glui.GLWin, images []image.Image) {
 		}
 		w.SetImage(images[c])
 	}
+}
+
+func readImage(str string) image.Image {
+	f, err := os.Open(str)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	img, _, err := image.Decode(f)
+	if err != nil {
+		panic(err)
+	}
+
+	return img
 }

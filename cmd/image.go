@@ -19,20 +19,27 @@ func main() {
 	// Read in image file indicated in command line
 	flag.Parse()
 	args := flag.Args()
-	f, err := os.Open(args[0])
-	if err != nil {
-		panic(err)
-	}
-	img, _, err := image.Decode(f)
-	if err != nil {
-		panic(err)
-	}
-	_ = f.Close()
-	size := img.Bounds().Size()
+	img := readImage(args[0])
 
 	// Create a new window with the image
+	size := img.Bounds().Size()
 	glui.NewGLWin(size.X, size.Y, "Image", img, true)
 
 	// Allow the system to render it
 	glui.Loop(nil)
+}
+
+func readImage(str string) image.Image {
+	f, err := os.Open(str)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	img, _, err := image.Decode(f)
+	if err != nil {
+		panic(err)
+	}
+
+	return img
 }
