@@ -74,18 +74,28 @@ func NewGLWin(w, h int, title string, img image.Image, decorated bool) *GLWin {
 	return glwin
 }
 
+// Image needs to be located at 0,0, RGBA and byte contiguous
 func convertImage(img image.Image) *image.RGBA {
+	bounds := img.Bounds()
+
 	// Convert to RGBA if not already
 	rgba, ok := img.(*image.RGBA)
 	if !ok {
 		// Perform color model conversion
-		rgba = image.NewRGBA(img.Bounds())
-		draw.Draw(rgba, rgba.Bounds(), img, image.Point{0, 0}, draw.Src)
+		//rgba = image.NewRGBA(image.Bounds())
+		rgba = image.NewRGBA(image.Rectangle{image.Point{0, 0}, bounds.Size()})
+		draw.Draw(rgba, rgba.Bounds(), img, bounds.Min, draw.Src)
+		return rgba
 	}
-	// All bytes need to be contiguous
-	if rgba.Stride != rgba.Rect.Size().X*4 {
-		panic(fmt.Errorf("unsupported stride"))
+
+	// Image must start at 0,0 and all bytes need to be contiguous
+	if rgba.Rect.Min.X != 0 || rgba.Rect.Min.Y != 0 || rgba.Stride != rgba.Rect.Size().X*4 {
+		// Fix
+		fix := image.NewRGBA(image.Rectangle{image.Point{0, 0}, bounds.Size()})
+		draw.Draw(fix, fix.Bounds(), rgba, bounds.Min, draw.Src)
+		return fix
 	}
+
 	return rgba
 }
 
