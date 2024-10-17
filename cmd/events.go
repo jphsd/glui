@@ -769,7 +769,7 @@ func main() {
 
 	fmt.Printf("Main loop starting\n")
 
-	for true {
+	for {
 		// Closing all windows quits the program
 		i := 0
 		for w := range slots {
