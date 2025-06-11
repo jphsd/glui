@@ -50,14 +50,16 @@ func keyCallback(w *glfw.Window, key glfw.Key, _ int, _ glfw.Action, _ glfw.Modi
 func update(w *glui.GLWin, images []image.Image) {
 	n := len(images)
 	c := 0
-	d, _ := time.ParseDuration("5s")
-	for true {
+	d, _ := time.ParseDuration("3s")
+	for {
 		time.Sleep(d)
 		c++
 		if c == n {
 			c = 0
 		}
-		w.SetImage(images[c])
+		if images[c] != nil {
+			w.SetImage(images[c])
+		}
 	}
 }
 
@@ -70,7 +72,7 @@ func readImage(str string) image.Image {
 
 	img, _, err := image.Decode(f)
 	if err != nil {
-		panic(err)
+		return nil
 	}
 
 	return img
