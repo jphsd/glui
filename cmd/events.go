@@ -371,36 +371,6 @@ func get_mods_name(mods glfw.ModifierKey) string {
 	return name
 }
 
-/*
-static size_t encode_utf8(char* s, unsigned int ch)
-{
-    size_t count = 0
-
-    if (ch < 0x80)
-        s[count++] = (char) ch
-    else if (ch < 0x800)
-    {
-        s[count++] = (ch >> 6) | 0xc0
-        s[count++] = (ch & 0x3f) | 0x80
-    }
-    else if (ch < 0x10000)
-    {
-        s[count++] = (ch >> 12) | 0xe0
-        s[count++] = ((ch >> 6) & 0x3f) | 0x80
-        s[count++] = (ch & 0x3f) | 0x80
-    }
-    else if (ch < 0x110000)
-    {
-        s[count++] = (ch >> 18) | 0xf0
-        s[count++] = ((ch >> 12) & 0x3f) | 0x80
-        s[count++] = ((ch >> 6) & 0x3f) | 0x80
-        s[count++] = (ch & 0x3f) | 0x80
-    }
-
-    return count
-}
-*/
-
 // The callbacks
 
 // The error callback is handled internally - see glfw/error.go
@@ -597,14 +567,11 @@ func key_callback(window *glfw.Window, key glfw.Key, scancode int, action glfw.A
 	}
 }
 
-// TODO
 func char_callback(window *glfw.Window, codepoint rune) {
 	slot := slots[window]
-	str := "TODO"
 
-	//    encode_utf8(string, codepoint)
-	fmt.Printf("%08x to %d at %0.3f: Character 0x%08x (%s) input\n",
-		counter, slot.number, glfw.GetTime(), codepoint, str)
+	fmt.Printf("%08x to %d at %0.3f: Character 0x%08x (%c) input\n",
+		counter, slot.number, glfw.GetTime(), codepoint, codepoint)
 	counter++
 }
 
