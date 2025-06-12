@@ -16,4 +16,4 @@ Finally, the events.c program provided in the C implementation of GLFW has been 
 
 	$ go run events.go
 
-This will dump out all the event types, for which call backs can be registered, to the terminal. It doesn't utilize the glui package itself.
+This will dump out all the event types for which call backs can be registered, to the terminal. It doesn't utilize the glui package itself.

@@ -138,6 +138,9 @@ func Loop(update func()) {
 
 func glfwRender(win *GLWin) {
 	window := win.Win
+	if window.GetAttrib(glfw.Iconified) == 1 {
+		return
+	}
 	window.MakeContextCurrent()
 
 	// Not required since the image maps to the entire window
