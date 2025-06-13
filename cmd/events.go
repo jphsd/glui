@@ -655,10 +655,10 @@ func main() {
 	}
 	defer glfw.Terminate()
 
-	fmt.Printf("C - toggle window closing enabled\n")
-	fmt.Printf("L - toggle modifier lock\n")
-	fmt.Printf("ESC - to exit\n")
-	fmt.Printf("Library initialized\n")
+	fmt.Println("C - toggle window closing enabled")
+	fmt.Println("L - toggle modifier lock")
+	fmt.Println("ESC - to exit")
+	fmt.Println("Library initialized")
 
 	glfw.SetMonitorCallback(monitor_callback)
 	glfw.SetJoystickCallback(joystick_callback)
@@ -666,7 +666,8 @@ func main() {
 	monitors := glfw.GetMonitors()
 	if *ffp != -1 {
 		m := *ffp
-		if m > len(monitors) {
+		if m >= len(monitors) {
+			fmt.Printf("Monitor %d out of range, using 0 instead\n", m)
 			m = 0
 		}
 		monitor = monitors[m]
