@@ -16,10 +16,9 @@ import (
 
 // GLWin ties an image to a window
 type GLWin struct {
-	Img   *image.RGBA
-	Win   *glfw.Window
-	dirty bool
-	lock  sync.Mutex
+	Img  *image.RGBA  // Image to load, nil otherwise
+	Win  *glfw.Window // Underlying GL window
+	lock sync.Mutex   // Monitor for Img
 }
 
 // WinMap provides a map of all windows to their corresponding GLWin
@@ -63,7 +62,7 @@ func NewGLWin(w, h int, title string, img image.Image, decorated bool) *GLWin {
 		initialized = true
 	}
 
-	glwin := &GLWin{convertImage(img), window, true, sync.Mutex{}}
+	glwin := &GLWin{convertImage(img), window, sync.Mutex{}}
 	WinMap[window] = glwin
 
 	// Set window refresh callback
@@ -104,7 +103,6 @@ func (w *GLWin) SetImage(img image.Image) {
 	w.lock.Lock()
 	defer w.lock.Unlock()
 	w.Img = convertImage(img)
-	w.dirty = true
 }
 
 // Loop is how window events get processed and the images rendered to their windows. It will run
@@ -122,9 +120,9 @@ func Loop(update func()) {
 				window.Destroy()
 				delete(WinMap, window)
 			}
-			if glwin.dirty {
+			if glwin.Img != nil {
+				// New image to load
 				glfwRender(glwin)
-				glwin.dirty = false
 			}
 		}
 		// Run user update function
@@ -137,20 +135,20 @@ func Loop(update func()) {
 }
 
 func glfwRender(win *GLWin) {
+	if win.Img == nil {
+		return
+	}
 	window := win.Win
 	if window.GetAttrib(glfw.Iconified) == 1 {
 		return
 	}
+
+	// Prepare to render
 	window.MakeContextCurrent()
-
-	// Not required since the image maps to the entire window
-	//	gl.ClearColor(1.0, 0.0, 0.0, 1.0) // Red!
-	//	gl.Clear(gl.COLOR_BUFFER_BIT)
-
-	// Render
 	gl.UseProgram(program)
 	gl.BindVertexArray(vao)
 	gl.ActiveTexture(gl.TEXTURE0)
+
 	// Load the texture
 	win.lock.Lock()
 	defer win.lock.Unlock()
@@ -158,10 +156,12 @@ func glfwRender(win *GLWin) {
 	if err != nil {
 		panic(err)
 	}
+	win.Img = nil
 
 	// Render it
 	gl.BindTexture(gl.TEXTURE_2D, texture)
 	gl.DrawArrays(gl.TRIANGLE_STRIP, 0, 4)
+
 	// Display it
 	window.SwapBuffers()
 }
