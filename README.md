@@ -21,7 +21,7 @@ In addition to handling the window rendering,
 the loop function also handles any call backs registered on the windows.
 
 ## Mouse Click Listener
-This allows click events to be generated and a list of overservers to be called with the click location.
+This allows click events to be generated and a list of observers to be called with the click location.
 
 ## Events.go
 Finally,
