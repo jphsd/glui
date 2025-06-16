@@ -20,8 +20,9 @@ The loop function can take a zero argument function that will be called once per
 In addition to handling the window rendering,
 the loop function also handles any call backs registered on the windows.
 
-## Mouse Click Listener
-This allows click events to be generated and a list of observers to be called with the click location.
+## Mouse Click and Drag Listeners
+These allow click and drag events to be generated and a list of observers to be called with the event location.
+See the mouse.go and drag.go examples in cmd/.
 
 ## Events.go
 Finally,
