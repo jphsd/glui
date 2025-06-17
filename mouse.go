@@ -63,48 +63,55 @@ func NewMouseClickListener(win *GLWin, button glfw.MouseButton, onClick func([]f
 type MouseDragListener struct {
 	Window    *GLWin
 	Button    glfw.MouseButton
-	Observers []func(point []float64, act Action)
+	Observers []func(point []float64, dx, dy float64, act Action)
+	Point     []float64
 	State     bool
 }
 
 // NewMouseDragListener adds a listener to the supplied window for the indicated button,
 // and the function to be called when a drag occurs.
-func NewMouseDragListener(win *GLWin, button glfw.MouseButton, onDrag func([]float64, Action)) *MouseDragListener {
-	res := &MouseDragListener{win, button, []func([]float64, Action){onDrag}, false}
+func NewMouseDragListener(win *GLWin, button glfw.MouseButton, onDrag func([]float64, float64, float64, Action)) *MouseDragListener {
+	res := &MouseDragListener{win, button, []func([]float64, float64, float64, Action){onDrag}, nil, false}
 	win.Win.SetMouseButtonCallback(func(w *glfw.Window, but glfw.MouseButton, act Action, mods glfw.ModifierKey) {
 		if but != res.Button {
 			return
 		}
 		x, y := w.GetCursorPos()
+		pt := []float64{x, y}
+		var dx, dy float64
 		if act == Press {
 			res.State = true
+			res.Point = []float64{x, y}
 		} else if act == Release {
 			if !res.State {
 				return
 			}
+			dx, dy = x-res.Point[0], y-res.Point[1]
 			res.State = false
 		}
-		pt := []float64{x, y}
 		// Call observers with mouse click
 		for _, ocf := range res.Observers {
 			if ocf == nil {
 				continue
 			}
-			ocf(pt, act)
+			ocf(pt, dx, dy, act)
 		}
+		res.Point = pt
 	})
 	win.Win.SetCursorPosCallback(func(w *glfw.Window, x, y float64) {
 		if !res.State {
 			return
 		}
 		pt := []float64{x, y}
+		dx, dy := x-res.Point[0], y-res.Point[1]
 		// Call observers with mouse click
 		for _, odf := range res.Observers {
 			if odf == nil {
 				continue
 			}
-			odf(pt, Repeat)
+			odf(pt, dx, dy, Repeat)
 		}
+		res.Point = pt
 	})
 
 	return res
