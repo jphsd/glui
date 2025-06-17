@@ -26,14 +26,14 @@ type MouseClickListener struct {
 // and the function to be called when a click is detected.
 func NewMouseClickListener(win *GLWin, button glfw.MouseButton, onClick func([]float64)) *MouseClickListener {
 	res := &MouseClickListener{win, button, nil, []func([]float64){onClick}}
-	win.Win.SetMouseButtonCallback(func(w *glfw.Window, but glfw.MouseButton, act glfw.Action, mods glfw.ModifierKey) {
+	win.Win.SetMouseButtonCallback(func(w *glfw.Window, but glfw.MouseButton, act Action, mods glfw.ModifierKey) {
 		if but != res.Button {
 			return
 		}
-		if act == glfw.Press {
+		if act == Press {
 			x, y := w.GetCursorPos()
 			res.Point = []float64{x, y}
-		} else if act == glfw.Release {
+		} else if act == Release {
 			if res.Point == nil {
 				return
 			}
@@ -63,22 +63,22 @@ func NewMouseClickListener(win *GLWin, button glfw.MouseButton, onClick func([]f
 type MouseDragListener struct {
 	Window    *GLWin
 	Button    glfw.MouseButton
-	Observers []func(point []float64, act glfw.Action)
+	Observers []func(point []float64, act Action)
 	State     bool
 }
 
 // NewMouseDragListener adds a listener to the supplied window for the indicated button,
 // and the function to be called when a drag occurs.
-func NewMouseDragListener(win *GLWin, button glfw.MouseButton, onDrag func([]float64, glfw.Action)) *MouseDragListener {
-	res := &MouseDragListener{win, button, []func([]float64, glfw.Action){onDrag}, false}
-	win.Win.SetMouseButtonCallback(func(w *glfw.Window, but glfw.MouseButton, act glfw.Action, mods glfw.ModifierKey) {
+func NewMouseDragListener(win *GLWin, button glfw.MouseButton, onDrag func([]float64, Action)) *MouseDragListener {
+	res := &MouseDragListener{win, button, []func([]float64, Action){onDrag}, false}
+	win.Win.SetMouseButtonCallback(func(w *glfw.Window, but glfw.MouseButton, act Action, mods glfw.ModifierKey) {
 		if but != res.Button {
 			return
 		}
 		x, y := w.GetCursorPos()
-		if act == glfw.Press {
+		if act == Press {
 			res.State = true
-		} else if act == glfw.Release {
+		} else if act == Release {
 			if !res.State {
 				return
 			}
@@ -103,7 +103,7 @@ func NewMouseDragListener(win *GLWin, button glfw.MouseButton, onDrag func([]flo
 			if odf == nil {
 				continue
 			}
-			odf(pt, glfw.Repeat)
+			odf(pt, Repeat)
 		}
 	})
 
