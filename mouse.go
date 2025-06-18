@@ -17,16 +17,16 @@ var (
 // to turn them into single click events at the point the button was first pressed.
 type MouseClickListener struct {
 	Window    *GLWin
-	Button    glfw.MouseButton
+	Button    MouseButton
 	Point     []float64
 	Observers []func(point []float64)
 }
 
 // NewMouseClickListener adds a listener to the supplied window for the indicated button,
 // and the function to be called when a click is detected.
-func NewMouseClickListener(win *GLWin, button glfw.MouseButton, onClick func([]float64)) *MouseClickListener {
+func NewMouseClickListener(win *GLWin, button MouseButton, onClick func([]float64)) *MouseClickListener {
 	res := &MouseClickListener{win, button, nil, []func([]float64){onClick}}
-	win.Win.SetMouseButtonCallback(func(w *glfw.Window, but glfw.MouseButton, act Action, mods glfw.ModifierKey) {
+	win.Win.SetMouseButtonCallback(func(w *glfw.Window, but MouseButton, act Action, mods glfw.ModifierKey) {
 		if but != res.Button {
 			return
 		}
@@ -50,7 +50,7 @@ func NewMouseClickListener(win *GLWin, button glfw.MouseButton, onClick func([]f
 				if ocf == nil {
 					continue
 				}
-				ocf(res.Point)
+				go ocf(res.Point)
 			}
 			res.Point = nil
 		}
@@ -62,7 +62,7 @@ func NewMouseClickListener(win *GLWin, button glfw.MouseButton, onClick func([]f
 // to turn them into a sequence of drag events from the point the button was first pressed until it is released.
 type MouseDragListener struct {
 	Window    *GLWin
-	Button    glfw.MouseButton
+	Button    MouseButton
 	Observers []func(point []float64, dx, dy float64, act Action)
 	Point     []float64
 	State     bool
@@ -70,9 +70,9 @@ type MouseDragListener struct {
 
 // NewMouseDragListener adds a listener to the supplied window for the indicated button,
 // and the function to be called when a drag occurs.
-func NewMouseDragListener(win *GLWin, button glfw.MouseButton, onDrag func([]float64, float64, float64, Action)) *MouseDragListener {
+func NewMouseDragListener(win *GLWin, button MouseButton, onDrag func([]float64, float64, float64, Action)) *MouseDragListener {
 	res := &MouseDragListener{win, button, []func([]float64, float64, float64, Action){onDrag}, nil, false}
-	win.Win.SetMouseButtonCallback(func(w *glfw.Window, but glfw.MouseButton, act Action, mods glfw.ModifierKey) {
+	win.Win.SetMouseButtonCallback(func(w *glfw.Window, but MouseButton, act Action, mods glfw.ModifierKey) {
 		if but != res.Button {
 			return
 		}
@@ -94,7 +94,7 @@ func NewMouseDragListener(win *GLWin, button glfw.MouseButton, onDrag func([]flo
 			if ocf == nil {
 				continue
 			}
-			ocf(pt, dx, dy, act)
+			go ocf(pt, dx, dy, act)
 		}
 		res.Point = pt
 	})
@@ -109,7 +109,7 @@ func NewMouseDragListener(win *GLWin, button glfw.MouseButton, onDrag func([]flo
 			if odf == nil {
 				continue
 			}
-			odf(pt, dx, dy, Repeat)
+			go odf(pt, dx, dy, Repeat)
 		}
 		res.Point = pt
 	})
