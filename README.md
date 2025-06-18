@@ -1,4 +1,4 @@
-# Simple Image Display For Go
+# Simple Image Display Using Open GL in Go
 
 This package wraps the [Go port](https://pkg.go.dev/github.com/go-gl/glfw/v3.3/glfw)
 of the [C implementation of GLFW](https://www.glfw.org/documentation.html)
