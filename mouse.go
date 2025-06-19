@@ -116,3 +116,27 @@ func NewMouseDragListener(win *GLWin, button MouseButton, onDrag func([]float64,
 
 	return res
 }
+
+// MouseMoveListener is a wrapper around the cursor position callback.
+type MouseMoveListener struct {
+	Window    *GLWin
+	Observers []func(point []float64)
+}
+
+// NewMouseMoveListener adds a listener to the supplied window,
+// and the function to be called when mouse movement occurs.
+func NewMouseMoveListener(win *GLWin, onMove func([]float64)) *MouseMoveListener {
+	res := &MouseMoveListener{win, []func([]float64){onMove}}
+	win.Win.SetCursorPosCallback(func(w *glfw.Window, x, y float64) {
+		pt := []float64{x, y}
+		// Call observers with mouse position
+		for _, omf := range res.Observers {
+			if omf == nil {
+				continue
+			}
+			go omf(pt)
+		}
+	})
+
+	return res
+}
