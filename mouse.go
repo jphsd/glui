@@ -140,3 +140,26 @@ func NewMouseMoveListener(win *GLWin, onMove func([]float64)) *MouseMoveListener
 
 	return res
 }
+
+// MouseScrollListener is a wrapper around the mouse scroll callback.
+type MouseScrollListener struct {
+	Window    *GLWin
+	Observers []func(dx, dy float64)
+}
+
+// NewMouseScrollListener adds a listener to the supplied window,
+// and the function to be called when mouse movement occurs.
+func NewMouseScrollListener(win *GLWin, onScroll func(float64, float64)) *MouseScrollListener {
+	res := &MouseScrollListener{win, []func(float64, float64){onScroll}}
+	win.Win.SetScrollCallback(func(w *glfw.Window, dx, dy float64) {
+		// Call observers with mouse scroll
+		for _, omf := range res.Observers {
+			if omf == nil {
+				continue
+			}
+			go omf(dx, dy)
+		}
+	})
+
+	return res
+}
