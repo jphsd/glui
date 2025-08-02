@@ -23,7 +23,7 @@ func main() {
 
 	// Create a new window with the image
 	size := img.Bounds().Size()
-	glui.NewGLWin(size.X, size.Y, "Image", img, true)
+	glui.NewGLWin(size.X, size.Y, args[0], img, true)
 
 	// Allow the system to render it
 	glui.Loop(nil)

@@ -6,8 +6,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/go-gl/glfw/v3.3/glfw"
-
 	"github.com/jphsd/glui"
 
 	_ "golang.org/x/image/bmp"
@@ -31,20 +29,17 @@ func main() {
 
 	// Create a new window to display the images and set a callback
 	win := glui.NewGLWin(800, 800, "Images", images[0], true)
-	win.Win.SetKeyCallback(keyCallback)
+	glui.NewKeyListener(win, func(k, _ int, _ glui.Action, _ glui.ModifierKey) {
+		if glui.GetKeyName(k) == "ESCAPE" {
+			win.Win.SetShouldClose(true)
+		}
+	})
 
 	// Launch the image updater
 	go update(win, images)
 
 	// Allow the system to render it
 	glui.Loop(nil)
-}
-
-func keyCallback(w *glfw.Window, key glfw.Key, _ int, _ glfw.Action, _ glfw.ModifierKey) {
-	// Close window on ESC key pressed
-	if key == glfw.KeyEscape {
-		w.SetShouldClose(true)
-	}
 }
 
 func update(w *glui.GLWin, images []image.Image) {

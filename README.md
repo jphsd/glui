@@ -20,9 +20,15 @@ The loop function can take a zero argument function that will be called once per
 In addition to handling the window rendering,
 the loop function also handles any call backs registered on the windows.
 
-## Mouse Click and Drag Listeners
-These allow click and drag events to be generated and a list of observers to be called with the event location.
+## Mouse Click, Scroll and Drag Listeners
+These allow click, scroll and drag events to be generated and a list of observers to be called with the event location.
 See the mouse.go and drag.go examples in cmd/.
+
+# Key and Character Listeners
+These provide glui style wrappers around GLFW's Key and Char window callbacks.
+Key provides access to press, release and repeat events,
+in addition to the key code and scan code of the actual button pressed.
+Character will only be notified for regular alphanumeric runes and any modifiers will have been applied.
 
 ## Events.go
 Finally,

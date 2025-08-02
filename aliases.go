@@ -26,3 +26,14 @@ const (
 	MouseButtonRight  MouseButton = glfw.MouseButtonRight
 	MouseButtonMiddle MouseButton = glfw.MouseButtonMiddle
 )
+
+type ModifierKey = glfw.ModifierKey
+
+const (
+	ModShift    ModifierKey = glfw.ModShift
+	ModControl  ModifierKey = glfw.ModControl
+	ModAlt      ModifierKey = glfw.ModAlt
+	ModSuper    ModifierKey = glfw.ModSuper
+	ModCapsLock ModifierKey = glfw.ModCapsLock
+	ModNumLock  ModifierKey = glfw.ModNumLock
+)

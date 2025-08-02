@@ -26,7 +26,7 @@ type MouseClickListener struct {
 // and the function to be called when a click is detected.
 func NewMouseClickListener(win *GLWin, button MouseButton, onClick func([]float64)) *MouseClickListener {
 	res := &MouseClickListener{win, button, nil, []func([]float64){onClick}}
-	win.Win.SetMouseButtonCallback(func(w *glfw.Window, but MouseButton, act Action, mods glfw.ModifierKey) {
+	win.Win.SetMouseButtonCallback(func(w *glfw.Window, but MouseButton, act Action, mods ModifierKey) {
 		if but != res.Button {
 			return
 		}
@@ -72,7 +72,7 @@ type MouseDragListener struct {
 // and the function to be called when a drag occurs.
 func NewMouseDragListener(win *GLWin, button MouseButton, onDrag func([]float64, float64, float64, Action)) *MouseDragListener {
 	res := &MouseDragListener{win, button, []func([]float64, float64, float64, Action){onDrag}, nil, false}
-	win.Win.SetMouseButtonCallback(func(w *glfw.Window, but MouseButton, act Action, mods glfw.ModifierKey) {
+	win.Win.SetMouseButtonCallback(func(w *glfw.Window, but MouseButton, act Action, mods ModifierKey) {
 		if but != res.Button {
 			return
 		}
