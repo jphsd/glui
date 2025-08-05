@@ -100,14 +100,17 @@ func convertImage(img image.Image) *image.RGBA {
 
 // SetImage is used to change the current image in a window. It's thread safe.
 func (w *GLWin) SetImage(img image.Image) {
+	rgba := convertImage(img)
 	w.lock.Lock()
 	defer w.lock.Unlock()
-	w.Img = convertImage(img)
+	w.Img = rgba
 }
 
-// Loop is how window events get processed and the images rendered to their windows. It will run
-// until there are no windows left to process. The update function provides a way to insert code
-// into this loop - it should be non-blocking otherwise window updates will stall.
+// Loop is how window events get processed and the images rendered to their windows.
+// It will run until there are no windows left to process.
+// The update function provides a way to insert codeinto this loop -
+// it should be non-blocking,
+// otherwise window updates and callbacks will stall.
 func Loop(update func()) {
 	defer glfw.Terminate()
 
