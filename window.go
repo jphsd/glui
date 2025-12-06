@@ -122,8 +122,7 @@ func Loop(update func()) {
 			if window.ShouldClose() {
 				window.Destroy()
 				delete(WinMap, window)
-			}
-			if glwin.Img != nil {
+			} else if glwin.Img != nil {
 				// New image to load
 				glfwRender(glwin)
 			}
