@@ -19,7 +19,7 @@ func main() {
 
 type drag struct{}
 
-func (d drag) OnDrag(but glui.MouseButton, pt []float64, dx, dy float64, mods glui.ModifierKey, act glui.Action) {
+func (d drag) OnDrag(mdl *glui.MouseDragListener, but glui.MouseButton, pt []float64, dx, dy float64, act glui.Action, mods glui.ModifierKey) {
 	switch act {
 	case glui.Press:
 		fmt.Printf("Drag started at %.2f,%.2f\n", pt[0], pt[1])

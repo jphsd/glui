@@ -3,7 +3,7 @@ package glui
 import "github.com/go-gl/glfw/v3.3/glfw"
 
 type Keyable interface {
-	OnKey(key Key, scancode int, act Action, mods ModifierKey)
+	OnKey(kl *KeyListener, key Key, scancode int, act Action, mods ModifierKey)
 }
 
 // KeyListener adds a wrapper around glfw's key callback.
@@ -21,7 +21,7 @@ func NewKeyListener(win *GLWin, onKey ...Keyable) *KeyListener {
 			if ocf == nil {
 				continue
 			}
-			go ocf.OnKey(k, sc, act, mods)
+			go ocf.OnKey(res, k, sc, act, mods)
 		}
 	})
 	return res
@@ -288,7 +288,7 @@ func GetKeyName(key Key) string {
 //func char_callback(window *glfw.Window, codepoint rune) {
 
 type Characterable interface {
-	OnCharacter(c rune)
+	OnCharacter(cl *CharacterListener, c rune)
 }
 
 // CharaterListener adds a wrapper around glfw's character callback.
@@ -306,7 +306,7 @@ func NewCharacterListener(win *GLWin, onChar ...Characterable) *CharacterListene
 			if ocf == nil {
 				continue
 			}
-			go ocf.OnCharacter(r)
+			go ocf.OnCharacter(res, r)
 		}
 	})
 	return res

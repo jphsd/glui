@@ -22,14 +22,14 @@ func main() {
 
 type frodo struct{}
 
-func (m frodo) OnMove(pt []float64) {
+func (m frodo) OnMove(mml *glui.MouseMoveListener, pt []float64) {
 	fmt.Printf("Mouse moved to %.2f,%.2f\n", pt[0], pt[1])
 }
 
-func (c frodo) OnClick(but glui.MouseButton, pt []float64, mods glui.ModifierKey) {
+func (c frodo) OnClick(mcl *glui.MouseClickListener, but glui.MouseButton, pt []float64, mods glui.ModifierKey) {
 	fmt.Printf("Mouse button %d  clicked at %.2f,%.2f with mods 0x%x\n", but, pt[0], pt[1], mods)
 }
 
-func (s frodo) OnScroll(x, y float64) {
+func (s frodo) OnScroll(msl *glui.MouseScrollListener, x, y float64) {
 	fmt.Printf("Mouse scroll %.2f,%.2f\n", x, y)
 }

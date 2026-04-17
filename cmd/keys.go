@@ -21,11 +21,11 @@ func main() {
 
 type frodo struct{}
 
-func (f frodo) OnKey(key glui.Key, sc int, act glui.Action, mods glui.ModifierKey) {
+func (f frodo) OnKey(kl *glui.KeyListener, key glui.Key, sc int, act glui.Action, mods glui.ModifierKey) {
 	fmt.Printf("Key: %s (%d), %d, %s %s\n", glui.GetKeyName(key), key, sc, GetActionName(act), GetModsName(mods))
 }
 
-func (f frodo) OnCharacter(r rune) {
+func (f frodo) OnCharacter(cl *glui.CharacterListener, r rune) {
 	fmt.Printf("Char: %c\n", r)
 }
 
