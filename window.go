@@ -114,8 +114,6 @@ func (w *GLWin) SetImage(img image.Image) {
 func Loop(update func()) {
 	defer glfw.Terminate()
 
-	glfw.SwapInterval(1) // Wait for next vsync
-
 	for len(WinMap) > 0 {
 		// Perform window maintenance
 		for window, glwin := range WinMap {
@@ -165,6 +163,7 @@ func glfwRender(win *GLWin) {
 	gl.DrawArrays(gl.TRIANGLE_STRIP, 0, 4)
 
 	// Display it
+	glfw.SwapInterval(1) // Wait for next vsync
 	window.SwapBuffers()
 }
 

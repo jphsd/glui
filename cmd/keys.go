@@ -13,13 +13,20 @@ func main() {
 
 	img := image.NewRGBA(image.Rectangle{image.Point{0, 0}, image.Point{width, height}})
 	win := glui.NewGLWin(width, height, "Keyboard Test", img, true)
-	glui.NewKeyListener(win, func(k, sc int, act glui.Action, mods glui.ModifierKey) {
-		fmt.Printf("Key: %s (%d), %d, %s %s\n", glui.GetKeyName(k), k, sc, GetActionName(act), GetModsName(mods))
-	})
-	glui.NewCharacterListener(win, func(r rune) {
-		fmt.Printf("Char: %c\n", r)
-	})
+	cb := frodo{}
+	glui.NewKeyListener(win, cb)
+	glui.NewCharacterListener(win, cb)
 	glui.Loop(nil)
+}
+
+type frodo struct{}
+
+func (f frodo) OnKey(key glui.Key, sc int, act glui.Action, mods glui.ModifierKey) {
+	fmt.Printf("Key: %s (%d), %d, %s %s\n", glui.GetKeyName(key), key, sc, GetActionName(act), GetModsName(mods))
+}
+
+func (f frodo) OnCharacter(r rune) {
+	fmt.Printf("Char: %c\n", r)
 }
 
 func GetModsName(mods glui.ModifierKey) string {

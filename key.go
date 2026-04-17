@@ -2,277 +2,281 @@ package glui
 
 import "github.com/go-gl/glfw/v3.3/glfw"
 
+type Keyable interface {
+	OnKey(key Key, scancode int, act Action, mods ModifierKey)
+}
+
 // KeyListener adds a wrapper around glfw's key callback.
 type KeyListener struct {
 	Window    *GLWin
-	Observers []func(int, int, Action, ModifierKey)
+	Observers []Keyable
 }
 
 // NewKeyListener adds a key listener to the supplied window
 // and the function to be called when a key action is detected.
-func NewKeyListener(win *GLWin, onKey func(int, int, Action, ModifierKey)) *KeyListener {
-	res := &KeyListener{win, []func(int, int, Action, ModifierKey){onKey}}
-	win.Win.SetKeyCallback(func(w *glfw.Window, k glfw.Key, sc int, act Action, mods ModifierKey) {
+func NewKeyListener(win *GLWin, onKey ...Keyable) *KeyListener {
+	res := &KeyListener{win, onKey}
+	win.Win.SetKeyCallback(func(w *glfw.Window, k Key, sc int, act Action, mods ModifierKey) {
 		for _, ocf := range res.Observers {
 			if ocf == nil {
 				continue
 			}
-			go ocf(int(k), sc, act, mods)
+			go ocf.OnKey(k, sc, act, mods)
 		}
 	})
 	return res
 }
 
-func GetKeyName(key int) string {
-	switch glfw.Key(key) {
+func GetKeyName(key Key) string {
+	switch key {
 	// Printable keys
-	case glfw.KeyA:
+	case KeyA:
 		return "A"
-	case glfw.KeyB:
+	case KeyB:
 		return "B"
-	case glfw.KeyC:
+	case KeyC:
 		return "C"
-	case glfw.KeyD:
+	case KeyD:
 		return "D"
-	case glfw.KeyE:
+	case KeyE:
 		return "E"
-	case glfw.KeyF:
+	case KeyF:
 		return "F"
-	case glfw.KeyG:
+	case KeyG:
 		return "G"
-	case glfw.KeyH:
+	case KeyH:
 		return "H"
-	case glfw.KeyI:
+	case KeyI:
 		return "I"
-	case glfw.KeyJ:
+	case KeyJ:
 		return "J"
-	case glfw.KeyK:
+	case KeyK:
 		return "K"
-	case glfw.KeyL:
+	case KeyL:
 		return "L"
-	case glfw.KeyM:
+	case KeyM:
 		return "M"
-	case glfw.KeyN:
+	case KeyN:
 		return "N"
-	case glfw.KeyO:
+	case KeyO:
 		return "O"
-	case glfw.KeyP:
+	case KeyP:
 		return "P"
-	case glfw.KeyQ:
+	case KeyQ:
 		return "Q"
-	case glfw.KeyR:
+	case KeyR:
 		return "R"
-	case glfw.KeyS:
+	case KeyS:
 		return "S"
-	case glfw.KeyT:
+	case KeyT:
 		return "T"
-	case glfw.KeyU:
+	case KeyU:
 		return "U"
-	case glfw.KeyV:
+	case KeyV:
 		return "V"
-	case glfw.KeyW:
+	case KeyW:
 		return "W"
-	case glfw.KeyX:
+	case KeyX:
 		return "X"
-	case glfw.KeyY:
+	case KeyY:
 		return "Y"
-	case glfw.KeyZ:
+	case KeyZ:
 		return "Z"
-	case glfw.Key1:
+	case Key1:
 		return "1"
-	case glfw.Key2:
+	case Key2:
 		return "2"
-	case glfw.Key3:
+	case Key3:
 		return "3"
-	case glfw.Key4:
+	case Key4:
 		return "4"
-	case glfw.Key5:
+	case Key5:
 		return "5"
-	case glfw.Key6:
+	case Key6:
 		return "6"
-	case glfw.Key7:
+	case Key7:
 		return "7"
-	case glfw.Key8:
+	case Key8:
 		return "8"
-	case glfw.Key9:
+	case Key9:
 		return "9"
-	case glfw.Key0:
+	case Key0:
 		return "0"
-	case glfw.KeySpace:
+	case KeySpace:
 		return "SPACE"
-	case glfw.KeyMinus:
+	case KeyMinus:
 		return "MINUS"
-	case glfw.KeyEqual:
+	case KeyEqual:
 		return "EQUAL"
-	case glfw.KeyLeftBracket:
+	case KeyLeftBracket:
 		return "LEFT BRACKET"
-	case glfw.KeyRightBracket:
+	case KeyRightBracket:
 		return "RIGHT BRACKET"
-	case glfw.KeyBackslash:
+	case KeyBackslash:
 		return "BACKSLASH"
-	case glfw.KeySemicolon:
+	case KeySemicolon:
 		return "SEMICOLON"
-	case glfw.KeyApostrophe:
+	case KeyApostrophe:
 		return "APOSTROPHE"
-	case glfw.KeyGraveAccent:
+	case KeyGraveAccent:
 		return "GRAVE ACCENT"
-	case glfw.KeyComma:
+	case KeyComma:
 		return "COMMA"
-	case glfw.KeyPeriod:
+	case KeyPeriod:
 		return "PERIOD"
-	case glfw.KeySlash:
+	case KeySlash:
 		return "SLASH"
-	case glfw.KeyWorld1:
+	case KeyWorld1:
 		return "WORLD 1"
-	case glfw.KeyWorld2:
+	case KeyWorld2:
 		return "WORLD 2"
 
 	// Function keys
-	case glfw.KeyEscape:
+	case KeyEscape:
 		return "ESCAPE"
-	case glfw.KeyF1:
+	case KeyF1:
 		return "F1"
-	case glfw.KeyF2:
+	case KeyF2:
 		return "F2"
-	case glfw.KeyF3:
+	case KeyF3:
 		return "F3"
-	case glfw.KeyF4:
+	case KeyF4:
 		return "F4"
-	case glfw.KeyF5:
+	case KeyF5:
 		return "F5"
-	case glfw.KeyF6:
+	case KeyF6:
 		return "F6"
-	case glfw.KeyF7:
+	case KeyF7:
 		return "F7"
-	case glfw.KeyF8:
+	case KeyF8:
 		return "F8"
-	case glfw.KeyF9:
+	case KeyF9:
 		return "F9"
-	case glfw.KeyF10:
+	case KeyF10:
 		return "F10"
-	case glfw.KeyF11:
+	case KeyF11:
 		return "F11"
-	case glfw.KeyF12:
+	case KeyF12:
 		return "F12"
-	case glfw.KeyF13:
+	case KeyF13:
 		return "F13"
-	case glfw.KeyF14:
+	case KeyF14:
 		return "F14"
-	case glfw.KeyF15:
+	case KeyF15:
 		return "F15"
-	case glfw.KeyF16:
+	case KeyF16:
 		return "F16"
-	case glfw.KeyF17:
+	case KeyF17:
 		return "F17"
-	case glfw.KeyF18:
+	case KeyF18:
 		return "F18"
-	case glfw.KeyF19:
+	case KeyF19:
 		return "F19"
-	case glfw.KeyF20:
+	case KeyF20:
 		return "F20"
-	case glfw.KeyF21:
+	case KeyF21:
 		return "F21"
-	case glfw.KeyF22:
+	case KeyF22:
 		return "F22"
-	case glfw.KeyF23:
+	case KeyF23:
 		return "F23"
-	case glfw.KeyF24:
+	case KeyF24:
 		return "F24"
-	case glfw.KeyF25:
+	case KeyF25:
 		return "F25"
 
 		// Cursor keys
-	case glfw.KeyUp:
+	case KeyUp:
 		return "UP"
-	case glfw.KeyDown:
+	case KeyDown:
 		return "DOWN"
-	case glfw.KeyLeft:
+	case KeyLeft:
 		return "LEFT"
-	case glfw.KeyRight:
+	case KeyRight:
 		return "RIGHT"
 
 		// Shift/Control etc.
-	case glfw.KeyLeftShift:
+	case KeyLeftShift:
 		return "LEFT SHIFT"
-	case glfw.KeyRightShift:
+	case KeyRightShift:
 		return "RIGHT SHIFT"
-	case glfw.KeyLeftControl:
+	case KeyLeftControl:
 		return "LEFT CONTROL"
-	case glfw.KeyRightControl:
+	case KeyRightControl:
 		return "RIGHT CONTROL"
-	case glfw.KeyLeftAlt:
+	case KeyLeftAlt:
 		return "LEFT ALT"
-	case glfw.KeyRightAlt:
+	case KeyRightAlt:
 		return "RIGHT ALT"
-	case glfw.KeyTab:
+	case KeyTab:
 		return "TAB"
-	case glfw.KeyEnter:
+	case KeyEnter:
 		return "ENTER"
-	case glfw.KeyBackspace:
+	case KeyBackspace:
 		return "BACKSPACE"
-	case glfw.KeyInsert:
+	case KeyInsert:
 		return "INSERT"
-	case glfw.KeyDelete:
+	case KeyDelete:
 		return "DELETE"
-	case glfw.KeyPageUp:
+	case KeyPageUp:
 		return "PAGE UP"
-	case glfw.KeyPageDown:
+	case KeyPageDown:
 		return "PAGE DOWN"
-	case glfw.KeyHome:
+	case KeyHome:
 		return "HOME"
-	case glfw.KeyEnd:
+	case KeyEnd:
 		return "END"
-	case glfw.KeyPrintScreen:
+	case KeyPrintScreen:
 		return "PRINT SCREEN"
-	case glfw.KeyNumLock:
+	case KeyNumLock:
 		return "NUM LOCK"
-	case glfw.KeyCapsLock:
+	case KeyCapsLock:
 		return "CAPS LOCK"
-	case glfw.KeyScrollLock:
+	case KeyScrollLock:
 		return "SCROLL LOCK"
-	case glfw.KeyPause:
+	case KeyPause:
 		return "PAUSE"
-	case glfw.KeyLeftSuper:
+	case KeyLeftSuper:
 		return "LEFT SUPER"
-	case glfw.KeyRightSuper:
+	case KeyRightSuper:
 		return "RIGHT SUPER"
-	case glfw.KeyMenu:
+	case KeyMenu:
 		return "MENU"
 
 		// Keypad
-	case glfw.KeyKP0:
+	case KeyKP0:
 		return "KEYPAD 0"
-	case glfw.KeyKP1:
+	case KeyKP1:
 		return "KEYPAD 1"
-	case glfw.KeyKP2:
+	case KeyKP2:
 		return "KEYPAD 2"
-	case glfw.KeyKP3:
+	case KeyKP3:
 		return "KEYPAD 3"
-	case glfw.KeyKP4:
+	case KeyKP4:
 		return "KEYPAD 4"
-	case glfw.KeyKP5:
+	case KeyKP5:
 		return "KEYPAD 5"
-	case glfw.KeyKP6:
+	case KeyKP6:
 		return "KEYPAD 6"
-	case glfw.KeyKP7:
+	case KeyKP7:
 		return "KEYPAD 7"
-	case glfw.KeyKP8:
+	case KeyKP8:
 		return "KEYPAD 8"
-	case glfw.KeyKP9:
+	case KeyKP9:
 		return "KEYPAD 9"
-	case glfw.KeyKPDivide:
+	case KeyKPDivide:
 		return "KEYPAD DIVIDE"
-	case glfw.KeyKPMultiply:
+	case KeyKPMultiply:
 		return "KEYPAD MULTIPLY"
-	case glfw.KeyKPSubtract:
+	case KeyKPSubtract:
 		return "KEYPAD SUBTRACT"
-	case glfw.KeyKPAdd:
+	case KeyKPAdd:
 		return "KEYPAD ADD"
-	case glfw.KeyKPDecimal:
+	case KeyKPDecimal:
 		return "KEYPAD DECIMAL"
-	case glfw.KeyKPEqual:
+	case KeyKPEqual:
 		return "KEYPAD EQUAL"
-	case glfw.KeyKPEnter:
+	case KeyKPEnter:
 		return "KEYPAD ENTER"
 
 	default:
@@ -283,22 +287,26 @@ func GetKeyName(key int) string {
 //window.SetCharCallback(char_callback)
 //func char_callback(window *glfw.Window, codepoint rune) {
 
+type Characterable interface {
+	OnCharacter(c rune)
+}
+
 // CharaterListener adds a wrapper around glfw's character callback.
 type CharacterListener struct {
 	Window    *GLWin
-	Observers []func(rune)
+	Observers []Characterable
 }
 
 // NewCharacterListener adds a key listener to the supplied window
 // and the function to be called when a character is detected.
-func NewCharacterListener(win *GLWin, onChar func(rune)) *CharacterListener {
-	res := &CharacterListener{win, []func(rune){onChar}}
+func NewCharacterListener(win *GLWin, onChar ...Characterable) *CharacterListener {
+	res := &CharacterListener{win, onChar}
 	win.Win.SetCharCallback(func(w *glfw.Window, r rune) {
 		for _, ocf := range res.Observers {
 			if ocf == nil {
 				continue
 			}
-			go ocf(r)
+			go ocf.OnCharacter(r)
 		}
 	})
 	return res
