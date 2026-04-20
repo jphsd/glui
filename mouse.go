@@ -48,16 +48,20 @@ func NewMouseClickListener(win *GLWin, onClick ...Clickable) *MouseClickListener
 				return
 			}
 			// Call observers with mouse click
-			for _, ocf := range res.Observers {
-				if ocf == nil {
-					continue
-				}
-				go ocf.OnClick(res, but, res.Point, res.Mods)
-			}
+			res.Click(but, res.Point, res.Mods)
 			res.Point = nil
 		}
 	})
 	return res
+}
+
+func (mcl *MouseClickListener) Click(but MouseButton, pt []float64, mods ModifierKey) {
+	for _, ocf := range mcl.Observers {
+		if ocf == nil {
+			continue
+		}
+		go ocf.OnClick(mcl, but, pt, mods)
+	}
 }
 
 type Draggable interface {
@@ -96,13 +100,7 @@ func NewMouseDragListener(win *GLWin, onDrag ...Draggable) *MouseDragListener {
 			dx, dy = x-res.Point[0], y-res.Point[1]
 			res.State = false
 		}
-		// Call observers with mouse drag
-		for _, odf := range res.Observers {
-			if odf == nil {
-				continue
-			}
-			go odf.OnDrag(res, but, pt, dx, dy, act, mods)
-		}
+		res.Drag(but, pt, dx, dy, act, mods)
 		res.Point = pt
 	})
 	// Dragging
@@ -112,17 +110,20 @@ func NewMouseDragListener(win *GLWin, onDrag ...Draggable) *MouseDragListener {
 		}
 		pt := []float64{x, y}
 		dx, dy := x-res.Point[0], y-res.Point[1]
-		// Call observers with mouse click
-		for _, odf := range res.Observers {
-			if odf == nil {
-				continue
-			}
-			go odf.OnDrag(res, res.Button, pt, dx, dy, Repeat, res.Mods)
-		}
+		res.Drag(res.Button, pt, dx, dy, Repeat, res.Mods)
 		res.Point = pt
 	})
 
 	return res
+}
+
+func (mdl *MouseDragListener) Drag(but MouseButton, pt []float64, dx, dy float64, act Action, mods ModifierKey) {
+	for _, odf := range mdl.Observers {
+		if odf == nil {
+			continue
+		}
+		go odf.OnDrag(mdl, but, pt, dx, dy, act, mods)
+	}
 }
 
 type Movable interface {
@@ -140,17 +141,19 @@ type MouseMoveListener struct {
 func NewMouseMoveListener(win *GLWin, onMove ...Movable) *MouseMoveListener {
 	res := &MouseMoveListener{win, onMove}
 	win.Win.SetCursorPosCallback(func(w *glfw.Window, x, y float64) {
-		pt := []float64{x, y}
-		// Call observers with mouse position
-		for _, omf := range res.Observers {
-			if omf == nil {
-				continue
-			}
-			go omf.OnMove(res, pt)
-		}
+		res.Move([]float64{x, y})
 	})
 
 	return res
+}
+
+func (mml *MouseMoveListener) Move(pt []float64) {
+	for _, omf := range mml.Observers {
+		if omf == nil {
+			continue
+		}
+		go omf.OnMove(mml, pt)
+	}
 }
 
 type Scrollable interface {
@@ -168,14 +171,17 @@ type MouseScrollListener struct {
 func NewMouseScrollListener(win *GLWin, onScroll ...Scrollable) *MouseScrollListener {
 	res := &MouseScrollListener{win, onScroll}
 	win.Win.SetScrollCallback(func(w *glfw.Window, dx, dy float64) {
-		// Call observers with mouse scroll
-		for _, omf := range res.Observers {
-			if omf == nil {
-				continue
-			}
-			go omf.OnScroll(res, dx, dy)
-		}
+		res.Scroll(dx, dy)
 	})
 
 	return res
+}
+
+func (msl *MouseScrollListener) Scroll(dx, dy float64) {
+	for _, omf := range msl.Observers {
+		if omf == nil {
+			continue
+		}
+		go omf.OnScroll(msl, dx, dy)
+	}
 }

@@ -17,14 +17,18 @@ type KeyListener struct {
 func NewKeyListener(win *GLWin, onKey ...Keyable) *KeyListener {
 	res := &KeyListener{win, onKey}
 	win.Win.SetKeyCallback(func(w *glfw.Window, k Key, sc int, act Action, mods ModifierKey) {
-		for _, ocf := range res.Observers {
-			if ocf == nil {
-				continue
-			}
-			go ocf.OnKey(res, k, sc, act, mods)
-		}
+		res.Key(k, sc, act, mods)
 	})
 	return res
+}
+
+func (kl *KeyListener) Key(k Key, sc int, act Action, mods ModifierKey) {
+	for _, ocf := range kl.Observers {
+		if ocf == nil {
+			continue
+		}
+		go ocf.OnKey(kl, k, sc, act, mods)
+	}
 }
 
 func GetKeyName(key Key) string {
@@ -284,9 +288,6 @@ func GetKeyName(key Key) string {
 	}
 }
 
-//window.SetCharCallback(char_callback)
-//func char_callback(window *glfw.Window, codepoint rune) {
-
 type Characterable interface {
 	OnCharacter(cl *CharacterListener, c rune)
 }
@@ -302,12 +303,16 @@ type CharacterListener struct {
 func NewCharacterListener(win *GLWin, onChar ...Characterable) *CharacterListener {
 	res := &CharacterListener{win, onChar}
 	win.Win.SetCharCallback(func(w *glfw.Window, r rune) {
-		for _, ocf := range res.Observers {
-			if ocf == nil {
-				continue
-			}
-			go ocf.OnCharacter(res, r)
-		}
+		res.Character(r)
 	})
 	return res
+}
+
+func (cl *CharacterListener) Character(r rune) {
+	for _, ocf := range cl.Observers {
+		if ocf == nil {
+			continue
+		}
+		go ocf.OnCharacter(cl, r)
+	}
 }
