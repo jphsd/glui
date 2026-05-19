@@ -1,6 +1,9 @@
 package glui
 
-import "github.com/go-gl/glfw/v3.3/glfw"
+import (
+	"github.com/go-gl/glfw/v3.3/glfw"
+	"image"
+)
 
 type Action = glfw.Action
 
@@ -170,4 +173,23 @@ const (
 	ModSuper    ModifierKey = glfw.ModSuper
 	ModCapsLock ModifierKey = glfw.ModCapsLock
 	ModNumLock  ModifierKey = glfw.ModNumLock
+)
+
+// Cursors
+
+type Cursor = glfw.Cursor
+
+var CreateCursor func(image.Image, int, int) *Cursor = glfw.CreateCursor
+
+type StandardCursor = glfw.StandardCursor
+
+var CreateStandardCursor func(StandardCursor) *Cursor = glfw.CreateStandardCursor
+
+const (
+	ArrowCursor     StandardCursor = glfw.ArrowCursor
+	IBeamCursor     StandardCursor = glfw.IBeamCursor
+	CrosshairCursor StandardCursor = glfw.CrosshairCursor
+	HandCursor      StandardCursor = glfw.HandCursor
+	HResizeCursor   StandardCursor = glfw.HResizeCursor
+	VResizeCursor   StandardCursor = glfw.VResizeCursor
 )

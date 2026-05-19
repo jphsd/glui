@@ -106,6 +106,11 @@ func (w *GLWin) SetImage(img image.Image) {
 	w.Img = rgba
 }
 
+// SetCursor sets the cursor to be displayed when it's within the client area of the window.
+func (w *GLWin) SetCursor(c *Cursor) {
+	w.Win.SetCursor(c)
+}
+
 // Loop is how window events get processed and the images rendered to their windows.
 // It will run until there are no windows left to process.
 // The update function provides a way to insert codeinto this loop -
