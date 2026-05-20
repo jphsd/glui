@@ -18,7 +18,7 @@ import (
 type GLWin struct {
 	Img  *image.RGBA  // Image to load, nil otherwise
 	Win  *glfw.Window // Underlying GL window
-	lock sync.Mutex   // Monitor for Img
+	lock *sync.Mutex  // Monitor for Img
 }
 
 // WinMap provides a map of all windows to their corresponding GLWin
@@ -62,7 +62,7 @@ func NewGLWin(w, h int, title string, img image.Image, decorated bool) *GLWin {
 		initialized = true
 	}
 
-	glwin := &GLWin{convertImage(img), window, sync.Mutex{}}
+	glwin := &GLWin{convertImage(img), window, &sync.Mutex{}}
 	WinMap[window] = glwin
 
 	// Set window refresh callback

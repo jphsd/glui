@@ -29,17 +29,21 @@ func main() {
 
 	// Create a new window to display the images and set a callback
 	win := glui.NewGLWin(800, 800, "Images", images[0], true)
-	glui.NewKeyListener(win, func(k, _ int, _ glui.Action, _ glui.ModifierKey) {
-		if glui.GetKeyName(k) == "ESCAPE" {
-			win.Win.SetShouldClose(true)
-		}
-	})
+	glui.NewKeyListener(win, okl{})
 
 	// Launch the image updater
 	go update(win, images)
 
 	// Allow the system to render it
 	glui.Loop(nil)
+}
+
+type okl struct{}
+
+func (k okl) OnKey(kl *glui.KeyListener, key glui.Key, scancode int, act glui.Action, mods glui.ModifierKey) {
+	if glui.GetKeyName(key) == "ESCAPE" {
+		kl.Window.Win.SetShouldClose(true)
+	}
 }
 
 func update(w *glui.GLWin, images []image.Image) {
